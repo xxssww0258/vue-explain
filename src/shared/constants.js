@@ -1,11 +1,12 @@
+// 常量声明
 export const SSR_ATTR = 'data-server-rendered'
-
+// 组件 指令  过滤
 export const ASSET_TYPES = [
   'component',
   'directive',
   'filter'
 ]
-
+// 生命周期
 export const LIFECYCLE_HOOKS = [
   'beforeCreate',
   'created',

@@ -1,7 +1,7 @@
 /* @flow */
 
-import config from '../config'
-import { initProxy } from './proxy'
+import config from '../config' // 一堆配置参数
+import { initProxy } from './proxy' 
 import { initState } from './state'
 import { initRender } from './render'
 import { initEvents } from './events'
@@ -12,7 +12,7 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
-export function initMixin (Vue: Class<Component>) {
+export function initMixin (Vue: Class<Component>) { // 出口一个混合状态的vue
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
     // a uid

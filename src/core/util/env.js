@@ -1,7 +1,7 @@
 /* @flow */
 // 这是一个环境判断文件 输出一堆环境
 // can we use __proto__?
-export const hasProto = '__proto__' in {}
+export const hasProto = '__proto__' in {}//是否拥有隐式原型
 
 // Browser environment sniffing
 export const inBrowser = typeof window !== 'undefined' //判断是否在浏览器

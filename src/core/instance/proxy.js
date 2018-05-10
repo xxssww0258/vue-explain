@@ -1,7 +1,7 @@
 /* not type checking this file because flow doesn't play well with Proxy */
 
-import config from 'core/config'
-import { warn, makeMap, isNative } from '../util/index'
+import config from 'core/config' // 获取配置文件
+import { warn, makeMap, isNative } from '../util/index' //获取工具函数
 
 let initProxy
 

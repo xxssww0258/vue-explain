@@ -8,7 +8,7 @@ import { isIOS, isNative } from './env'
 
 const callbacks = []
 let pending = false //有待 未决定
-// 刷新回调
+// 刷新回调 执行回调数据
 function flushCallbacks () {
   pending = false
   const copies = callbacks.slice(0)// 应该是复制数组
@@ -26,6 +26,12 @@ function flushCallbacks () {
 // when state is changed right before repaint (e.g. #6813, out-in transitions).
 // Here we use microtask by default, but expose a way to force (macro) task when
 // needed (e.g. in event handlers attached by v-on).
+// 在这里，我们使用microtasks和（宏）任务推迟包装。
+//   在<2.4我们在任何地方都使用微任务，但是有些情况下微任务的优先级太高，
+//   顺序事件（例如＃4521，＃6690）或者甚至在相同的冒泡之间
+//   事件（＃6566）。 然而，在任何地方使用（宏）任务也存在微妙的问题
+//   当状态在重新绘制之前立即改变（例如＃6813，外出过渡）。
+//   这里我们默认使用microtask，但是在需要的时候暴露一种强制（宏）任务的方式（例如，在v-on附加的事件处理程序中）。
 let microTimerFunc //微型定时器功能
 let macroTimerFunc //宏定时器功能
 let useMacroTask = false
