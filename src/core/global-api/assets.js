@@ -1,6 +1,6 @@
 /* @flow */
 
-import { ASSET_TYPES } from 'shared/constants'
+import { ASSET_TYPES } from 'shared/constants' // 资源类型 分辨 是指令还是过滤 还是组件
 import { isPlainObject, validateComponentName } from '../util/index'
 
 export function initAssetRegisters (Vue: GlobalAPI) {

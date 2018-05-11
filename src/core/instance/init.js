@@ -42,9 +42,9 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
       )
     }
     /* istanbul ignore else */
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') { // 开发环境才 禁止占用关键字
       initProxy(vm)
-    } else {
+    } else { // 实际生产环境不禁止
       vm._renderProxy = vm
     }
     // expose real self
