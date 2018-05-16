@@ -130,13 +130,14 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
 
 /**
  * Define a reactive property on an Object.
+ * 在对象上定义一个反应性属性。
  */
 export function defineReactive (
   obj: Object,
   key: string,
   val: any,
-  customSetter?: ?Function,
-  shallow?: boolean
+  customSetter?: ?Function, //自定义Setter
+  shallow?: boolean //浅
 ) {
   const dep = new Dep()
 
@@ -194,34 +195,45 @@ export function defineReactive (
  * Set a property on an object. Adds the new property and
  * triggers change notification if the property doesn't
  * already exist.
+ * 在一个对象上设置一个属性。 如果该属性尚不存在，则添加新属性并触发更改通知。
+ * 传入 对象  对象的key  和一个值
+ * 然后合并对象的key 返回 传进来的值
  */
 export function set (target: Array<any> | Object, key: any, val: any): any {
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
   ) {
+    // 无法将反应性属性设置为未定义，空值或原始值：$ {（target：any） }
     warn(`Cannot set reactive property on undefined, null, or primitive value: ${(target: any)}`)
   }
-  if (Array.isArray(target) && isValidArrayIndex(key)) {
-    target.length = Math.max(target.length, key)
+  //  如果是数组
+  if (Array.isArray(target) && isValidArrayIndex(key)) { // 是否有效的索引
+    target.length = Math.max(target.length, key)// 修改数组长度
     target.splice(key, 1, val)
     return val
   }
+  // 如果是普通的对象 不在原型里的
   if (key in target && !(key in Object.prototype)) {
     target[key] = val
     return val
   }
-  const ob = (target: any).__ob__
+  // 如果是拥有原型里面的ob
+  const ob = (target: any).__ob__ // 应该是修改ob的属性为any 然后添加一个__ob__属性
   if (target._isVue || (ob && ob.vmCount)) {
     process.env.NODE_ENV !== 'production' && warn(
       'Avoid adding reactive properties to a Vue instance or its root $data ' +
-      'at runtime - declare it upfront in the data option.'
+      'at runtime - declare it upfront in the data option.'+
+      '避免将反应性属性添加到Vue实例或其根$data'+
+      '在运行时 - 在数据选项中声明它。'
     )
     return val
   }
+  // 如果ob属性为undefined
   if (!ob) {
     target[key] = val
     return val
   }
+
   defineReactive(ob.value, key, val)
   ob.dep.notify()
   return val

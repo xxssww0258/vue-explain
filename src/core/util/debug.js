@@ -5,15 +5,17 @@ import { noop } from 'shared/util'
 
 export let warn = noop
 export let tip = noop
-export let generateComponentTrace = (noop: any) // work around flow check
-export let formatComponentName = (noop: any)
+// 这些函数在下面声明了
+export let generateComponentTrace = (noop: any) // work around flow check 解决流量检查问题
+export let formatComponentName = (noop: any) // 格式化组件名字
 
+// 只有发生在开发环境才会发出警告
 if (process.env.NODE_ENV !== 'production') {
-  const hasConsole = typeof console !== 'undefined'
-  const classifyRE = /(?:^|[-_])(\w)/g
+  const hasConsole = typeof console !== 'undefined' //  这个判断有点尴尬 我还没遇到console 会 undefined
+  const classifyRE = /(?:^|[-_])(\w)/g //如果是开始，则取^; 如果不是开始，则取-_
   const classify = str => str
-    .replace(classifyRE, c => c.toUpperCase())
-    .replace(/[-_]/g, '')
+    .replace(classifyRE, c => c.toUpperCase()) // 转大写
+    .replace(/[-_]/g, '') // 是去掉-_
 
   warn = (msg, vm) => {
     const trace = vm ? generateComponentTrace(vm) : ''

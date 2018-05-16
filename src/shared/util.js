@@ -167,6 +167,7 @@ export function cached<F: Function> (fn: F): F {
 }
 /**
  * Camelize a hyphen-delimited string.
+ * 转换成驼峰
  */
 const camelizeRE = /-(\w)/g
 export const camelize = cached((str: string): string => {
@@ -183,7 +184,7 @@ export const capitalize = cached((str: string): string => {
 /**
  * Hyphenate a camelCase string.
  */
-// 连字符串驼峰。
+// 驼峰转 连字符格式
 const hyphenateRE = /\B([A-Z])/g
 export const hyphenate = cached((str: string): string => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
