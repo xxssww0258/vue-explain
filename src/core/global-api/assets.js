@@ -1,5 +1,8 @@
 /* @flow */
-
+// 这个global-api 是给Vue 构造函数上添加api
+// Vue.directive
+// Vue.filter
+// Vue.component
 import { ASSET_TYPES } from 'shared/constants' // 资源类型 分辨 是指令还是过滤 还是组件
 import { isPlainObject, validateComponentName } from '../util/index'
 

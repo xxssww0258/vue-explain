@@ -1,4 +1,7 @@
 /* @flow */
+// 这个global-api 是给Vue 构造函数上添加api
+// Vue.extend
+// Vue.cid  = 0
 
 import { ASSET_TYPES } from 'shared/constants'
 import { defineComputed, proxy } from '../instance/state'
@@ -35,7 +38,7 @@ export function initExtend (Vue: GlobalAPI) {
     }
     // 
     const Sub = function VueComponent (options) {
-      this._init(options) // 执行初始化
+      this._init(options) // 执行初始化  这里在init.js 定义了
     }
     Sub.prototype = Object.create(Super.prototype)
     Sub.prototype.constructor = Sub

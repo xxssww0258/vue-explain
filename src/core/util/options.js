@@ -1,5 +1,10 @@
 /* @flow */
 // 这个是$options对象
+// .$options
+//   .components {}
+//   .directives {}
+//   .filters {}
+//    _base fn Vue(options)
 
 import config from '../config'
 import { warn } from './debug'
@@ -27,7 +32,7 @@ import {
  * value into the final value.
  * 选项覆盖策略是处理如何将父选项值和子选项值合并到最终值中的函数。
  */
-const strats = config.optionMergeStrategies
+const strats = config.optionMergeStrategies  //  是一个object.create(null) 对象
 
 /**
  * Options with restrictions
@@ -70,6 +75,7 @@ function mergeData (to: Object, from: ?Object): Object {
 
 /**
  * Data
+ * 好像和上面的合并一样  但是多了个函数转对象再合并
  */
 export function mergeDataOrFn (
   parentVal: any,
@@ -77,6 +83,7 @@ export function mergeDataOrFn (
   vm?: Component
 ): ?Function {
   if (!vm) {
+    // 如果没有传入vm
     // in a Vue.extend merge, both should be functions
     // 在Vue.extend合并中，两者都应该是函数
     if (!childVal) {
@@ -101,15 +108,15 @@ export function mergeDataOrFn (
         typeof parentVal === 'function' ? parentVal.call(this, this) : parentVal
       )
     }
-  } else {
+  } else { // 如果传入了vm
     return function mergedInstanceDataFn () {
       // instance merge
       const instanceData = typeof childVal === 'function'
-        ? childVal.call(vm, vm)
-        : childVal
+        ? childVal.call(vm, vm)//如果是函数 执行这个函数传入 vm  估计执行完毕后返回vm对象
+        : childVal// 如果不是函数 就直接返回
       const defaultData = typeof parentVal === 'function'
-        ? parentVal.call(vm, vm)
-        : parentVal
+        ? parentVal.call(vm, vm)//如果是函数 执行这个函数传入 vm  
+        : parentVal// 如果不是函数 就直接返回
       if (instanceData) {
         return mergeData(instanceData, defaultData)
       } else {
@@ -127,9 +134,9 @@ strats.data = function (
   if (!vm) {
     if (childVal && typeof childVal !== 'function') {
       process.env.NODE_ENV !== 'production' && warn(
-        'The "data" option should be a function ' +
-        'that returns a per-instance value in component ' +
-        'definitions.',
+        'The "data" option should be a function ' +'data 选项应该是一个 函数'+
+        'that returns a per-instance value in component ' + '在组件中返回每个实例的值' +
+        'definitions.'+ '的定义',
         vm
       )
 
@@ -287,28 +294,28 @@ export function validateComponentName (name: string) {
 /**
  * Ensure all props option syntax are normalized into the
  * Object-based format.
- * 确保所有的道具选项语法都标准化为 Object-based 的格式。
+ * 确保所有的道具选项语法都标准化为 Object-based 的格式。 面向对象
  */
 function normalizeProps (options: Object, vm: ?Component) {
   const props = options.props
   if (!props) return
   const res = {}
   let i, val, name
-  if (Array.isArray(props)) {
+  if (Array.isArray(props)) {// 数组
     i = props.length
     while (i--) {
       val = props[i]
       if (typeof val === 'string') {
-        name = camelize(val)
+        name = camelize(val)//转驼峰
         res[name] = { type: null }
       } else if (process.env.NODE_ENV !== 'production') {
         warn('props must be strings when using array syntax.')
       }
     }
-  } else if (isPlainObject(props)) {
+  } else if (isPlainObject(props)) {// 如果是对象
     for (const key in props) {
       val = props[key]
-      name = camelize(key)
+      name = camelize(key) // 转驼峰
       res[name] = isPlainObject(val)
         ? val
         : { type: val }

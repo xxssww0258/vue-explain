@@ -63,6 +63,7 @@ export function validateProp (
 
 /**
  * Get the default value of a prop.
+ * 获取prop的默认值。
  */
 function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): any {
   // no default, return undefined
@@ -73,14 +74,14 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   // warn against non-factory defaults for Object & Array
   if (process.env.NODE_ENV !== 'production' && isObject(def)) {
     warn(
-      'Invalid default value for prop "' + key + '": ' +
-      'Props with type Object/Array must use a factory function ' +
-      'to return the default value.',
+      'Invalid default value for prop "' + key + '": ' +'prop的默认值无效'+
+      'Props with type Object/Array must use a factory function ' +'类型为Object / Array的道具必须使用工厂函数'+
+      'to return the default value.'+ '返回默认值',
       vm
     )
   }
-  // the raw prop value was also undefined from previous render,
-  // return previous default value to avoid unnecessary watcher trigger
+  // the raw prop value was also undefined from previous render, 原始属性值也是前一个渲染未定义的，
+  // return previous default value to avoid unnecessary watcher trigger 返回先前的默认值以避免不必要的观察者触发
   if (vm && vm.$options.propsData &&
     vm.$options.propsData[key] === undefined &&
     vm._props[key] !== undefined
@@ -89,6 +90,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   }
   // call factory function for non-Function types
   // a value is Function if its prototype is function even across different execution context
+  // 为非函数类型调用工厂函数如果函数的原型即使在不同的执行上下文中也是函数，那么值就是函数
   return typeof def === 'function' && getType(prop.type) !== 'Function'
     ? def.call(vm)
     : def
@@ -96,6 +98,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
 
 /**
  * Assert whether a prop is valid.
+ * 断言prop是否有效。
  */
 function assertProp (
   prop: PropOptions,
@@ -176,9 +179,9 @@ function assertType (value: any, type: Function): {
 }
 
 /**
- * Use function string name to check built-in types,
- * because a simple equality check will fail when running
- * across different vms / iframes.
+ * Use function string name to check built-in types,使用函数字符串名称检查内置类型，
+ * because a simple equality check will fail when running 因为运行时简单的相等性检查会失败
+ * across different vms / iframes. 跨越不同的vms / iframe
  */
 function getType (fn) {
   const match = fn && fn.toString().match(/^\s*function (\w+)/)
@@ -188,7 +191,7 @@ function getType (fn) {
 function isSameType (a, b) {
   return getType(a) === getType(b)
 }
-
+//  返回  type 的索引
 function getTypeIndex (type, expectedTypes): number {
   if (!Array.isArray(expectedTypes)) {
     return isSameType(expectedTypes, type) ? 0 : -1

@@ -10,11 +10,11 @@ import { initLifecycle, callHook } from './lifecycle'
 import { initProvide, initInjections } from './inject'
 import { extend, mergeOptions, formatComponentName } from '../util/index'
 
-let uid = 0
+let uid = 0 // uid 我猜是视口id
 
 export function initMixin (Vue: Class<Component>) { // 出口一个混合状态的vue
   Vue.prototype._init = function (options?: Object) {
-    const vm: Component = this
+    const vm: Component = this // 因为这里是构造函数 所以这里的this 是实例对象 并不是Vue
     // a uid
     vm._uid = uid++
 
@@ -26,13 +26,13 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
       mark(startTag)
     }
 
-    // a flag to avoid this being observed
+    // a flag to avoid this being observed 一个标志可以避免这种情况的observed发生 
     vm._isVue = true
     // merge options
     if (options && options._isComponent) {
-      // optimize internal component instantiation
-      // since dynamic options merging is pretty slow, and none of the
-      // internal component options needs special treatment.
+      // optimize internal component instantiation 优化内部组件实例
+      // since dynamic options merging is pretty slow, and none of the 因为动态选项合并很慢，而且没有
+      // internal component options needs special treatment. 内部组件选项需要特殊处理。
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
@@ -45,9 +45,9 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     if (process.env.NODE_ENV !== 'production') { // 开发环境才 禁止占用关键字
       initProxy(vm)
     } else { // 实际生产环境不禁止
-      vm._renderProxy = vm
+      vm._renderProxy = vm //这是什么鬼 我也不清楚
     }
-    // expose real self
+    // expose real self 暴露自己
     vm._self = vm
     initLifecycle(vm)
     initEvents(vm)
@@ -66,7 +66,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     }
 
     if (vm.$options.el) {
-      vm.$mount(vm.$options.el)
+      vm.$mount(vm.$options.el)// 挂在
     }
   }
 }
