@@ -1,4 +1,5 @@
 /* @flow */
+// _init被执行后九绑定了一堆方法到vm上
 
 import config from '../config' // 一堆配置参数
 import { initProxy } from './proxy' 
@@ -11,7 +12,6 @@ import { initProvide, initInjections } from './inject'
 import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0 // uid 我猜是视口id
-
 export function initMixin (Vue: Class<Component>) { // 出口一个混合状态的vue
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this // 因为这里是构造函数 所以这里的this 是实例对象 并不是Vue
@@ -20,6 +20,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
 
     let startTag, endTag
     /* istanbul ignore if */
+    // 渲染时间记录
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       startTag = `vue-perf-start:${vm._uid}`
       endTag = `vue-perf-end:${vm._uid}`
@@ -27,7 +28,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     }
 
     // a flag to avoid this being observed 一个标志可以避免这种情况的observed发生 
-    vm._isVue = true
+    vm._isVue = true //执行过_init 就会有一个isVue的标记
     // merge options
     if (options && options._isComponent) {
       // optimize internal component instantiation 优化内部组件实例
@@ -59,12 +60,13 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     callHook(vm, 'created')
 
     /* istanbul ignore if */
+    // 渲染速度标记
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-      vm._name = formatComponentName(vm, false)
+      vm._name = formatComponentName(vm, false)// <Anonymous> 得到
       mark(endTag)
-      measure(`vue ${vm._name} init`, startTag, endTag)
+      measure(`vue ${vm._name} init`, startTag, endTag)// 这个渲染是需要修改config.performance=true 才行的  还有一个vue performance devtool 的插件
     }
-
+    // 如有.el这个属性就挂载 在指定对象上
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)// 挂在
     }
@@ -90,18 +92,18 @@ export function initInternalComponent (vm: Component, options: InternalComponent
   }
 }
 
-export function resolveConstructorOptions (Ctor: Class<Component>) {
+export function resolveConstructorOptions (Ctor: Class<Component>) {//解析构造器选项
   let options = Ctor.options
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions
     if (superOptions !== cachedSuperOptions) {
-      // super option changed,
-      // need to resolve new options.
+      // super option changed, 超级选项已更改，
+      // need to resolve new options.需要解决新的选择。
       Ctor.superOptions = superOptions
       // check if there are any late-modified/attached options (#4976)
       const modifiedOptions = resolveModifiedOptions(Ctor)
-      // update base extend options
+      // update base extend options 更新基本扩展选项
       if (modifiedOptions) {
         extend(Ctor.extendOptions, modifiedOptions)
       }

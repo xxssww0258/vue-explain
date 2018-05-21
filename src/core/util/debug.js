@@ -13,7 +13,7 @@ export let formatComponentName = (noop: any) // 格式化组件名字
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined' //  这个判断有点尴尬 我还没遇到console 会 undefined
   const classifyRE = /(?:^|[-_])(\w)/g //如果是开始，则取^; 如果不是开始，则取-_
-  const classify = str => str
+  const classify = str => str // 大写驼峰化
     .replace(classifyRE, c => c.toUpperCase()) // 转大写
     .replace(/[-_]/g, '') // 是去掉-_
 
@@ -36,6 +36,7 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   formatComponentName = (vm, includeFile) => {
+    // 如果是根组件
     if (vm.$root === vm) {
       return '<Root>'
     }
@@ -45,13 +46,13 @@ if (process.env.NODE_ENV !== 'production') {
         ? vm.$options || vm.constructor.options
         : vm || {}
     let name = options.name || options._componentTag
-    const file = options.__file
-    if (!name && file) {
-      const match = file.match(/([^/\\]+)\.vue$/)
+    const file = options.__file // 这个__file 应该是 vue-loader 加上去的 指向这个组件的路径
+    if (!name && file) {// 如果没有name就以组件路径的名字来当组件名
+      const match = file.match(/([^/\\]+)\.vue$/) // 非\] 的.vue
       name = match && match[1]
     }
 
-    return (
+    return (// 大写驼峰化
       (name ? `<${classify(name)}>` : `<Anonymous>`) +
       (file && includeFile !== false ? ` at ${file}` : '')
     )

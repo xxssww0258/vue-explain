@@ -16,7 +16,7 @@ export function initAssetRegisters (Vue: GlobalAPI) {
   ASSET_TYPES.forEach(type => { //  指令 过滤 组件
     Vue[type] = function (
       id: string,// 传入一个指令的id 
-      definition: Function | Object //参数
+      definition: Function | Object //定义
     ): Function | Object | void {
       if (!definition) {
         return this.options[type + 's'][id]
@@ -31,7 +31,7 @@ export function initAssetRegisters (Vue: GlobalAPI) {
           // 修改name   值 
           definition.name = definition.name || id
           // 返回一个生成组件的函数
-          definition = this.options._base.extend(definition) // 这句看不懂
+          definition = this.options._base.extend(definition) // _base 在./index.js 被指向Vue构造函数 也就等于Vue.extend()
         }
         // 如果是一个指令 且参数 一个函数 就把他修改成一个对象
         if (type === 'directive' && typeof definition === 'function') {
