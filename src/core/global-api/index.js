@@ -30,21 +30,22 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   }
   Object.defineProperty(Vue, 'config', configDef)
 
-  // exposed util methods.
+  // exposed util methods. 
   // NOTE: these are not considered part of the public API - avoid relying on
   // them unless you are aware of the risk.
-  Vue.util = {
+  Vue.util = { // 暴露工具方法
     warn,
     extend,
     mergeOptions,
     defineReactive
   }
 
-  Vue.set = set
-  Vue.delete = del
-  Vue.nextTick = nextTick
+  Vue.set = set //observer
+  Vue.delete = del //observer
+  Vue.nextTick = nextTick // util
 
-  Vue.options = Object.create(null)
+  Vue.options = Object.create(null) // map
+    // // 组件 指令  过滤
   ASSET_TYPES.forEach(type => {
     Vue.options[type + 's'] = Object.create(null)
   })
@@ -54,6 +55,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   // 这用于标识“基本”构造函数，以便在Weex的多实例场景中扩展所有纯对象组件。
   Vue.options._base = Vue //
 
+  // 组件 和  keep-alive
   extend(Vue.options.components, builtInComponents)
 
   initUse(Vue) // 挂载 .use

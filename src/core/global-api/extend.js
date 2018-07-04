@@ -23,6 +23,18 @@ export function initExtend (Vue: GlobalAPI) {
    * Class inheritance 类继承
    * 创建组件
    */
+  // extendOptions = {
+	// 	template: '<p v-show="param">i am {{name}}{{myId}}</p>'||'#dd'||'<App 引入的自定义标签/>',
+	// 	props:['my-id']
+	// 	data:function(){
+	// 		return {
+	// 			name : 'zhangsan'
+	// 			mid:this.myId
+	// 		}
+	// 	}
+	// 	methods:{}
+	// 	created:{}
+	// }
   Vue.extend = function (extendOptions: Object): Function {
     extendOptions = extendOptions || {}
     const Super = this
@@ -44,8 +56,8 @@ export function initExtend (Vue: GlobalAPI) {
     Sub.prototype = Object.create(Super.prototype)//生产一个对象 并修改原型指向
     Sub.prototype.constructor = Sub 
     Sub.cid = cid++
-    Sub.options = mergeOptions(
-      Super.options,
+    Sub.options = mergeOptions(//合并根Vue的配置
+      Super.options,// Super.options 是根Vue的配置对象
       extendOptions
     )
     Sub['super'] = Super//超级选项 配合下面的superOptions 但是不知道有什么用
@@ -61,7 +73,7 @@ export function initExtend (Vue: GlobalAPI) {
     }
 
     // allow further extension/mixin/plugin usage 允许进一步扩展/混入/插件使用
-    Sub.extend = Super.extend //不知道这样赋值有什么意义 不是原本就在原型里面有吗
+    Sub.extend = Super.extend //不知道这样赋值有什么意义 不是原本就在原型里面有吗 估计是想他独立一个构造函数 使用hasOwnPerproty循环
     Sub.mixin = Super.mixin
     Sub.use = Super.use
 

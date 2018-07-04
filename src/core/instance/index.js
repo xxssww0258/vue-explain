@@ -11,9 +11,12 @@ function Vue (options) {
   ) {
     warn('Vue is a constructor and should be called with the `new` keyword')
   }
-  this._init(options)
+  //执行init  init.js 里面 
+  this._init(options) 
 }
 
+//添加到构造函数的原型里面
+// 只能加载原型里面 没办法加载在构造函数里
 initMixin(Vue)
 stateMixin(Vue)
 eventsMixin(Vue)

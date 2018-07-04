@@ -27,7 +27,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
       mark(startTag)
     }
 
-    // a flag to avoid this being observed 一个标志可以避免这种情况的observed发生 
+    // a flag to avoid this being observed/*一个防止vm实例自身被观察的标志位*/
     vm._isVue = true //执行过_init 就会有一个isVue的标记
     // merge options
     if (options && options._isComponent) {
@@ -50,14 +50,14 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     }
     // expose real self 暴露自己
     vm._self = vm
-    initLifecycle(vm)
-    initEvents(vm)
-    initRender(vm)
-    callHook(vm, 'beforeCreate')
+    initLifecycle(vm) /*初始化生命周期*/
+    initEvents(vm) /*初始化事件*/
+    initRender(vm) /*初始化render*/
+    callHook(vm, 'beforeCreate') /*调用beforeCreate钩子函数并且触发beforeCreate钩子事件*/
     initInjections(vm) // resolve injections before data/props
-    initState(vm)
+    initState(vm) 
     initProvide(vm) // resolve provide after data/props
-    callHook(vm, 'created')
+    callHook(vm, 'created')/*调用created钩子函数并且触发created钩子事件*/
 
     /* istanbul ignore if */
     // 渲染速度标记
