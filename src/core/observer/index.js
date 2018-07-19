@@ -21,6 +21,7 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 /**
  * In some cases we may want to disable observation inside a component's
  * update computation.
+ * 在某些情况下，我们可能希望禁用组件内部的观察更新计算。
  */
 export let shouldObserve: boolean = true
 
@@ -38,20 +39,21 @@ export class Observer {
   value: any;
   dep: Dep;
   vmCount: number; // number of vms that has this object as root $data
+                    // 将此对象作为root $ data的vms数
 
   constructor (value: any) {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this)
-    if (Array.isArray(value)) {
+    def(value, '__ob__', this)// 定义一个__ob__ 挂在Observer实例上去
+    if (Array.isArray(value)) {// 如果是数组就修改原型
       const augment = hasProto
         ? protoAugment
         : copyAugment
       augment(value, arrayMethods, arrayKeys)
       this.observeArray(value)
     } else {
-      this.walk(value)
+      this.walk(value)// 观察每一个属性
     }
   }
 
@@ -59,6 +61,7 @@ export class Observer {
    * Walk through each property and convert them into
    * getter/setters. This method should only be called when
    * value type is Object.
+   * 透过每个属性并将其转换为内容/设置者。 仅当值类型为Object时才应调用此方法。
    */
   walk (obj: Object) {
     const keys = Object.keys(obj)
@@ -69,6 +72,7 @@ export class Observer {
 
   /**
    * Observe a list of Array items.
+   * 观察Array项列表。
    */
   observeArray (items: Array<any>) {
     for (let i = 0, l = items.length; i < l; i++) {
@@ -82,6 +86,7 @@ export class Observer {
 /**
  * Augment an target Object or Array by intercepting
  * the prototype chain using __proto__
+ * 通过使用__proto__拦截原型链来扩充目标对象或数组
  */
 function protoAugment (target, src: Object, keys: any) {
   /* eslint-disable no-proto */
@@ -106,11 +111,13 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * returns the new observer if successfully observed,
  * or the existing observer if the value already has one.
  */
+//======================================== 这个才是观察者函数 ========================================
 export function observe (value: any, asRootData: ?boolean): Observer | void {
-  if (!isObject(value) || value instanceof VNode) {
+  if (!isObject(value) || value instanceof VNode) {// 判断类型必须是数组和对象
     return
   }
   let ob: Observer | void
+  // 尝试创建一个Observer实例（__ob__），如果成功创建Observer实例则返回新的Observer实例，如果已有Observer实例则返回现有的Observer实例。
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
@@ -140,7 +147,7 @@ export function defineReactive (
   shallow?: boolean //浅
 ) {
   const dep = new Dep()
-
+  // 查看描述符
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -154,16 +161,18 @@ export function defineReactive (
   }
 
   let childOb = !shallow && observe(val)
+  // 修改访问器属性
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // 循环的时候要判断有没有目标 但是这个目标在哪里来的我还不是很清楚
       if (Dep.target) {
         dep.depend()
         if (childOb) {
           childOb.dep.depend()
-          if (Array.isArray(value)) {
+          if (Array.isArray(value)) { //数组的处理
             dependArray(value)
           }
         }
@@ -178,7 +187,7 @@ export function defineReactive (
       }
       /* eslint-enable no-self-compare */
       if (process.env.NODE_ENV !== 'production' && customSetter) {
-        customSetter()
+        customSetter()// 应该是自定义指令检查
       }
       if (setter) {
         setter.call(obj, newVal)

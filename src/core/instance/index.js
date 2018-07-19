@@ -17,10 +17,10 @@ function Vue (options) {
 
 //添加到构造函数的原型里面
 // 只能加载原型里面 没办法加载在构造函数里
-initMixin(Vue)
-stateMixin(Vue)
-eventsMixin(Vue)
-lifecycleMixin(Vue)
-renderMixin(Vue)
+initMixin(Vue) //init
+stateMixin(Vue) //state
+eventsMixin(Vue) //event
+lifecycleMixin(Vue) // 生命周期
+renderMixin(Vue) //渲染
 
 export default Vue

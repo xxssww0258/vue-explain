@@ -127,6 +127,7 @@ function initData (vm: Component) {
   const props = vm.$options.props
   const methods = vm.$options.methods
   let i = keys.length
+  // 保留字检查
   while (i--) {
     const key = keys[i]
     if (process.env.NODE_ENV !== 'production') {
@@ -144,10 +145,10 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
-      proxy(vm, `_data`, key)
+      proxy(vm, `_data`, key)// 修改this.$options.data 映射到 this.data
     }
   }
-  // observe data
+  // observe data 观察data
   observe(data, true /* asRootData */)
 }
 

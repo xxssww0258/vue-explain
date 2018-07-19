@@ -34,6 +34,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
       // optimize internal component instantiation 优化内部组件实例
       // since dynamic options merging is pretty slow, and none of the 因为动态选项合并很慢，而且没有
       // internal component options needs special treatment. 内部组件选项需要特殊处理。
+      // 初始化内部组件
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
@@ -72,7 +73,7 @@ export function initMixin (Vue: Class<Component>) { // 出口一个混合状态�
     }
   }
 }
-
+// 初始化内部组件
 export function initInternalComponent (vm: Component, options: InternalComponentOptions) {
   const opts = vm.$options = Object.create(vm.constructor.options)
   // doing this because it's faster than dynamic enumeration.
@@ -115,7 +116,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {//解析构�
   }
   return options
 }
-
+// 解析修改选项
 function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
   let modified
   const latest = Ctor.options
@@ -129,7 +130,7 @@ function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
   }
   return modified
 }
-
+//重复数据删除
 function dedupe (latest, extended, sealed) {
   // compare latest and sealed to ensure lifecycle hooks won't be duplicated
   // between merges
